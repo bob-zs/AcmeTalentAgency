@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client';
 import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
 import store, { fetchClients, fetchSkills, fetchClientSkills } from './store';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
+import Home from './Home';
 
 const App = connect(
   state => state, // component now has access to the state as props
@@ -19,40 +21,14 @@ const App = connect(
     this.props.loadData();
   }
   render() {
-    const { clients, skills, clientSkills } = this.props; // this is a lifecycle method? He said
     return (
       <div>
-        <h1>Acme Talent Agency</h1>
-        <main>
-          <ul>
-            {
-              clients.map(client => {
-                const count = clientSkills.filter(clientSkill => clientSkill.clientId === client.id).length;
-                return (
-                  <li key={ client.id }>
-                    { client.name } ({ count })
-                  </li>
-                );
-            })
-            }
-          </ul>
-          <ul>
-            {
-              skills.map(skill => {
-                const count = clientSkills.filter(clientSkill => clientSkill.skillId === skill.id).length;
-                return (
-                  <li key={skill.id}>
-                    { skill.name } ({ count })
-                  </li>
-                );
-              })
-            }
-          </ul>
-        </main>
+        <h1><Link to='/'>Acme Talent Agency</Link></h1>
+        <Route path='/' exact component={ Home } />
       </div>
     );
   }
 });
 
 const root = createRoot(document.querySelector('#root'));
-root.render(<Provider store={ store }><App /></Provider>);
+root.render(<Provider store={ store }><Router><App /></Router></Provider>);
